@@ -11,10 +11,12 @@ from linebot import (
 from linebot.exceptions import (
     InvalidSignatureError
 )
-from linebot.models import (
+from linebot.models import *
+'''(
     MessageEvent, TextMessage, TextSendMessage,TemplateSendMessage,ConfirmTemplate,PostbackTemplateAction, MessageTemplateAction, URITemplateAction,
     CarouselColumn,ButtonsTemplate,CarouselTemplate,ImageSendMessage
 )
+'''
 import requests
 from bs4 import BeautifulSoup
 import random
@@ -35,8 +37,8 @@ import googlemaps
 
 app = Flask(__name__)
 
-line_bot_api = LineBotApi('onU2FphFjSxdzRGV0Zl+bRZ8KdP8GTTzALFhx905kzkTMHMMcIXt2ci2buc2P8tEnvnzfhkPzrhDImEw9GjMEc4JVXIvHVD1gYjd4eRFGEBB9cgnBEhIbgXf+RMXaMt88TkjRtsH+IFLtBDXQ4JppgdB04t89/1O/w1cDnyilFU=')
-handler = WebhookHandler('0582949ec0957d488adc4c10784d557b')
+line_bot_api = LineBotApi('K/X09aZ8AtWI9bdYcJAhz4e66wE8sFz1gJQnyCBPxI11bqvikHi5a99rOdDy98B5nvnzfhkPzrhDImEw9GjMEc4JVXIvHVD1gYjd4eRFGEDH4CE0/mwOf7yqXZjbop2c3zGCQbUTCOi8hOzAyMx0qQdB04t89/1O/w1cDnyilFU=')
+handler = WebhookHandler('7abd763933584142f1220ddaa72a6455')
 
 
 project_id = 'line-207303'
@@ -526,7 +528,7 @@ def handle_message(event):
             ]
         )
     )
-        line_bot_api.reply_message(event.reply_token, buttons_template_message)
+        line_bot_api.reply_message(event.reply_oken, buttons_template_message)
         return 0
     ###
     ######
@@ -616,11 +618,49 @@ def handle_message(event):
         )
         return 0
 
-    if(line.startswith('翻譯')):
-        line = line[2:]
-        content = translator_tw(line)
-        line_bot_api.reply_message(event.reply_token,TextSendMessage(text=content))
+    if line == '主打商品':
+        image_carousel_template_message = TemplateSendMessage(
+        alt_text='ImageCarousel template',
+        template=ImageCarouselTemplate(
+            columns=[
+                ImageCarouselColumn(
+                    image_url='https://imgur.com/9bHEgE7.jpg',
+                    action=PostbackTemplateAction(
+                        label='青椒',
+                        
+                        data='action=buy&itemid=1'
+                        )
+                    ),
+                ImageCarouselColumn(
+                    image_url='https://imgur.com/AKoaTdO.jpg',
+                    action=PostbackTemplateAction(
+                        label='洋蔥',
+                        text='postback text2',
+                        data='action=buy&itemid=2'
+                        )
+                    ),
+                ImageCarouselColumn(
+                    image_url='https://imgur.com/FuYuEIf.jpg',
+                    action=PostbackTemplateAction(
+                        label='Carrot',
+                        text='postback text2',
+                        data='action=buy&itemid=2'
+                        )
+                    ),
+                ImageCarouselColumn(
+                    image_url='https://imgur.com/44keflv.jpg',
+                    action=PostbackTemplateAction(
+                        label='草莓',
+                        text='postback text2',
+                        data='action=buy&itemid=2'
+                        )
+                    )
+                ]
+            )
+        )
+        line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
         return 0
+
 
 
     #圖片
@@ -699,6 +739,33 @@ def handle_message(event):
         line  = translator_cn(line)
         content = detect_intent_texts(line)
         line_bot_api.reply_message(event.reply_token,TextSendMessage(text=content))
+@handler.add(PostbackEvent)
+def handel_postback(event):
+    if event.postback.data == 'action=buy&itemid=1':
+        buttons_template_message = TemplateSendMessage(
+        alt_text='Buttons template',
+        template=ButtonsTemplate(
+            thumbnail_image_url='https://example.com/image.jpg',
+            title='目錄',
+            text='Please select',
+            actions=[
+                URITemplateAction(
+                    label='請選擇位置',
+                    uri='line://nv/location'
+                )
+            ]
+        )
+    )
+        line_bot_api.reply_message(event.reply_token, buttons_template_message)
+        return 0
+    else:
+        return 0
+
+@handler.add(MessageEvent, message=LocationMessage)
+def handel_location_message(event):
+    print('OK')
+    line_bot_api.reply_message(event.reply_token,TextSendMessage(text = event.message.address))
+
 
 
 if __name__ == "__main__":
