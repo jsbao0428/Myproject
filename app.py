@@ -37,7 +37,7 @@ import googlemaps
 
 app = Flask(__name__)
 
-line_bot_api = LineBotApi('K/X09aZ8AtWI9bdYcJAhz4e66wE8sFz1gJQnyCBPxI11bqvikHi5a99rOdDy98B5nvnzfhkPzrhDImEw9GjMEc4JVXIvHVD1gYjd4eRFGEDH4CE0/mwOf7yqXZjbop2c3zGCQbUTCOi8hOzAyMx0qQdB04t89/1O/w1cDnyilFU=')
+line_bot_api = LineBotApi('7quSgdi2HGlW6eHMxh5mHVaVv3/ojC4bx6ZwKYB2jMCd4SvgU5WXu/6LHQppNUAknvnzfhkPzrhDImEw9GjMEc4JVXIvHVD1gYjd4eRFGEAnTECSBIoUJD5KoTqtkqu+iMrMqPChFbrq+iQF/lVFKQdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('7abd763933584142f1220ddaa72a6455')
 
 
@@ -218,7 +218,7 @@ def callback():
     return 'OK'
 
 
-@handler.add(MessageEvent, message=TextMessage)
+@handler.add(MessageEvent, message=TextMessage)#add webhook event(Message event)object,type of message= TextMessage
 def handle_message(event):
     line=event.message.text
     #content = "{}: {}".format('q', event.message.text)
@@ -624,34 +624,34 @@ def handle_message(event):
         template=ImageCarouselTemplate(
             columns=[
                 ImageCarouselColumn(
-                    image_url='https://imgur.com/9bHEgE7.jpg',
+                    image_url='https://imgur.com/FjgDREY.jpg',
                     action=PostbackTemplateAction(
                         label='青椒',
-                        
+                        text='青椒',
                         data='action=buy&itemid=1'
                         )
                     ),
                 ImageCarouselColumn(
-                    image_url='https://imgur.com/AKoaTdO.jpg',
+                    image_url='https://imgur.com/IXWQqnE.jpg',
                     action=PostbackTemplateAction(
                         label='洋蔥',
-                        text='postback text2',
+                        text='洋蔥',
                         data='action=buy&itemid=2'
                         )
                     ),
                 ImageCarouselColumn(
-                    image_url='https://imgur.com/FuYuEIf.jpg',
+                    image_url='https://imgur.com/6Q6AjtR.jpg',
                     action=PostbackTemplateAction(
-                        label='Carrot',
-                        text='postback text2',
+                        label='紅蘿蔔',
+                        text='紅蘿蔔',
                         data='action=buy&itemid=2'
                         )
                     ),
                 ImageCarouselColumn(
-                    image_url='https://imgur.com/44keflv.jpg',
+                    image_url='https://imgur.com/RTjzZvT.jpg',
                     action=PostbackTemplateAction(
                         label='草莓',
-                        text='postback text2',
+                        text='草莓',
                         data='action=buy&itemid=2'
                         )
                     )
@@ -659,6 +659,28 @@ def handle_message(event):
             )
         )
         line_bot_api.reply_message(event.reply_token, image_carousel_template_message)
+        return 0
+
+
+    if line == '目前位置':
+        confirm_template_message = TemplateSendMessage(
+        	alt_text='Confirm Template',
+        	template=ConfirmTemplate(
+        		text='是否傳送目前位置?',
+        		actions=[
+        			URITemplateAction(
+        				label='Yes',
+        				uri='line://nv/location'
+        			),
+        			PostbackTemplateAction(
+        				label='No',
+        				text='Can not get location',
+        				data='No_autho'
+        			)
+        		]
+        	)
+        )
+        line_bot_api.reply_message(event.reply_token, confirm_template_message)
         return 0
 
 
@@ -733,15 +755,85 @@ def handle_message(event):
         content = mapper(line.split(' ',2)[0],line.split(' ',2)[1],line.split(' ',2)[2])
         line_bot_api.reply_message(event.reply_token,TextSendMessage(text = content))
         return 0
+    ###
+    ###button template###
+    if line=='產品訂購':
+        buttons_template_message = TemplateSendMessage(
+        alt_text='Buttons template',
+        template=ButtonsTemplate(
+            thumbnail_image_url='https://imgur.com/wSkcawC.jpg',
+            title='產品訂購',
+            text='請選擇類別',
+            actions=[
+                MessageTemplateAction(
+                    label='水果類',
+                    text='訂購水果'
+                ),
+                MessageTemplateAction(
+                    label='蔬菜類',
+                    text='訂購蔬菜'
+                )
+            ]
+        )
+    )
+        line_bot_api.reply_message(event.reply_token, buttons_template_message)
+        return 0
+    ####
+    if line=='訂購水果':
+        buttons_template_message = TemplateSendMessage(
+        alt_text='Buttons template',
+        template=ButtonsTemplate(
+            thumbnail_image_url='https://imgur.com/LegoZBt.jpg',
+            title='產品訂購',
+            text='請選擇數量',
+            actions=[
+                URITemplateAction(
+                            label='大量訂購',
+                            uri='https://www.google.com.tw/'
+                        ),
+                URITemplateAction(
+                            label='小量訂購',
+                            uri='http://yahoo.com.tw/'
+                        )
+            ]
+        )
+    )
+        line_bot_api.reply_message(event.reply_token, buttons_template_message)
+        return 0
+    ####
+    if line=='訂購蔬菜':
+        buttons_template_message = TemplateSendMessage(
+        alt_text='Buttons template',
+        template=ButtonsTemplate(
+            thumbnail_image_url='https://i.imgur.com/ck7mQQy.jpg',
+            title='產品訂購',
+            text='請選擇數量',
+            actions=[
+                URITemplateAction(
+                            label='大量訂購',
+                            uri='https://www.google.com.tw/'
+                        ),
+                URITemplateAction(
+                            label='小量訂購',
+                            uri='http://yahoo.com.tw/'
+                        )
+            ]
+        )
+    )
+        line_bot_api.reply_message(event.reply_token, buttons_template_message)
+        return 0
 
     ####
     else:
-        line  = translator_cn(line)
-        content = detect_intent_texts(line)
-        line_bot_api.reply_message(event.reply_token,TextSendMessage(text=content))
-@handler.add(PostbackEvent)
+        #line  = translator_cn(line)
+        #content = detect_intent_texts(line)
+        #line_bot_api.reply_message(event.reply_token,TextSendMessage(text=content))
+        return 0
+
+
+@handler.add(PostbackEvent) #add webhook event(Postback event) object
 def handel_postback(event):
-    if event.postback.data == 'action=buy&itemid=1':
+    if event.postback.data == 'Yes_autho':
         buttons_template_message = TemplateSendMessage(
         alt_text='Buttons template',
         template=ButtonsTemplate(
@@ -761,7 +853,7 @@ def handel_postback(event):
     else:
         return 0
 
-@handler.add(MessageEvent, message=LocationMessage)
+@handler.add(MessageEvent, message=LocationMessage) #add webhook event(Message event)object,type of message=LocationMessage
 def handel_location_message(event):
     print('OK')
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text = event.message.address))
