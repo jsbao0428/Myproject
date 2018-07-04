@@ -37,7 +37,7 @@ import googlemaps
 
 app = Flask(__name__)
 
-line_bot_api = LineBotApi('7quSgdi2HGlW6eHMxh5mHVaVv3/ojC4bx6ZwKYB2jMCd4SvgU5WXu/6LHQppNUAknvnzfhkPzrhDImEw9GjMEc4JVXIvHVD1gYjd4eRFGEAnTECSBIoUJD5KoTqtkqu+iMrMqPChFbrq+iQF/lVFKQdB04t89/1O/w1cDnyilFU=')
+line_bot_api = LineBotApi('bhorpss8ixHh8J8GlSre/O7TpEIkM5graSg7BIgWNVuTwDVifXwbgogKSAH28CzDnvnzfhkPzrhDImEw9GjMEc4JVXIvHVD1gYjd4eRFGEBQRLcXxm+79skom/qbYMHanN5gnFXXcGtA8AOjcILM2gdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('7abd763933584142f1220ddaa72a6455')
 
 
@@ -625,34 +625,30 @@ def handle_message(event):
             columns=[
                 ImageCarouselColumn(
                     image_url='https://imgur.com/FjgDREY.jpg',
-                    action=PostbackTemplateAction(
-                        label='青椒',
-                        text='青椒',
-                        data='action=buy&itemid=1'
+                    action=URITemplateAction(
+                            label='青椒',
+                            uri='http://example.com/2'
                         )
                     ),
                 ImageCarouselColumn(
                     image_url='https://imgur.com/IXWQqnE.jpg',
-                    action=PostbackTemplateAction(
-                        label='洋蔥',
-                        text='洋蔥',
-                        data='action=buy&itemid=2'
+                    action=URITemplateAction(
+                            label='洋蔥',
+                            uri='http://example.com/2'
                         )
                     ),
                 ImageCarouselColumn(
                     image_url='https://imgur.com/6Q6AjtR.jpg',
-                    action=PostbackTemplateAction(
-                        label='紅蘿蔔',
-                        text='紅蘿蔔',
-                        data='action=buy&itemid=2'
+                    action=URITemplateAction(
+                            label='胡蘿蔔',
+                            uri='http://example.com/2'
                         )
                     ),
                 ImageCarouselColumn(
                     image_url='https://imgur.com/RTjzZvT.jpg',
-                    action=PostbackTemplateAction(
-                        label='草莓',
-                        text='草莓',
-                        data='action=buy&itemid=2'
+                    action=URITemplateAction(
+                            label='草莓',
+                            uri='http://example.com/2'
                         )
                     )
                 ]
@@ -761,7 +757,7 @@ def handle_message(event):
         buttons_template_message = TemplateSendMessage(
         alt_text='Buttons template',
         template=ButtonsTemplate(
-            thumbnail_image_url='https://imgur.com/wSkcawC.jpg',
+            thumbnail_image_url='https://imgur.com/nFxvnks.jpg',
             title='產品訂購',
             text='請選擇類別',
             actions=[
@@ -783,7 +779,7 @@ def handle_message(event):
         buttons_template_message = TemplateSendMessage(
         alt_text='Buttons template',
         template=ButtonsTemplate(
-            thumbnail_image_url='https://imgur.com/LegoZBt.jpg',
+            thumbnail_image_url='https://imgur.com/9dUBPoW.jpg',
             title='產品訂購',
             text='請選擇數量',
             actions=[
@@ -805,7 +801,7 @@ def handle_message(event):
         buttons_template_message = TemplateSendMessage(
         alt_text='Buttons template',
         template=ButtonsTemplate(
-            thumbnail_image_url='https://i.imgur.com/ck7mQQy.jpg',
+            thumbnail_image_url='https://imgur.com/CGIYiBc.jpg',
             title='產品訂購',
             text='請選擇數量',
             actions=[
@@ -823,6 +819,31 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, buttons_template_message)
         return 0
 
+    if line == '客服-常見問題':
+        buttons_template_message = TemplateSendMessage(
+        alt_text='Buttons template',
+        template=ButtonsTemplate(
+            thumbnail_image_url='https://i.imgur.com/BAdwbI7.jpg',
+            title='常見問題',
+            text='請選擇問題種類',
+            actions=[
+                PostbackTemplateAction(
+                    label='退貨',
+                    data='Returns'
+                ),
+                URITemplateAction(
+                    label='其他問題',
+                    uri='http://yahoo.com.tw/'
+                )
+            ]
+        )
+    )
+        line_bot_api.reply_message(event.reply_token,buttons_template_message)
+        return 0
+
+
+
+
     ####
     else:
         #line  = translator_cn(line)
@@ -833,23 +854,10 @@ def handle_message(event):
 
 @handler.add(PostbackEvent) #add webhook event(Postback event) object
 def handel_postback(event):
-    if event.postback.data == 'Yes_autho':
-        buttons_template_message = TemplateSendMessage(
-        alt_text='Buttons template',
-        template=ButtonsTemplate(
-            thumbnail_image_url='https://example.com/image.jpg',
-            title='目錄',
-            text='Please select',
-            actions=[
-                URITemplateAction(
-                    label='請選擇位置',
-                    uri='line://nv/location'
-                )
-            ]
-        )
-    )
-        line_bot_api.reply_message(event.reply_token, buttons_template_message)
-        return 0
+    if event.postback.data == 'Returns':
+    	message = '請致電02-2777-5266\n我們將有專人為您服務'
+    	line_bot_api.reply_message(event.reply_token, TextSendMessage(text = message))
+    	return 0
     else:
         return 0
 
