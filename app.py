@@ -37,7 +37,7 @@ import googlemaps
 
 app = Flask(__name__)
 
-line_bot_api = LineBotApi('bhorpss8ixHh8J8GlSre/O7TpEIkM5graSg7BIgWNVuTwDVifXwbgogKSAH28CzDnvnzfhkPzrhDImEw9GjMEc4JVXIvHVD1gYjd4eRFGEBQRLcXxm+79skom/qbYMHanN5gnFXXcGtA8AOjcILM2gdB04t89/1O/w1cDnyilFU=')
+line_bot_api = LineBotApi('EKTuPLKKy13ITejMcLxlvdP5r+1KHS+qQB8GiC6nqFGgBJgQpfUGJe9+itOWcV4unvnzfhkPzrhDImEw9GjMEc4JVXIvHVD1gYjd4eRFGED7xjB1ikM3WCukoIorMeM09omm2hJK6Bw5X53xzVtacQdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('7abd763933584142f1220ddaa72a6455')
 
 
